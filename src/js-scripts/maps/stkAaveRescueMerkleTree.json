@@ -1,0 +1,33 @@
+{
+    "merkleRoot": "0x076285a97409ee449883f7b4b3ef05869056e64b16ba475a30169ff9f6240a02",
+    "tokenTotal": "107.413908882451669436 stkAAVE",
+    "tokenTotalInWei": "107413908882451669436",
+    "claims": {
+        "0x2aa7D888CEC91D26e5A6D8DbE7DBE3E79DF5B347": {
+            "index": 0,
+            "amountInWei": "64000000000000000",
+            "amount": "0.064 stkAAVE",
+            "proof": [
+                "0x0c9e3c0da7683b03713c46ec16a7615e7ad1a85e1251150c901e53cef34f7e2d",
+                "0xe3422ba5861af136f775c41327b67714fe53dc5a7947ec432a363787db829bde"
+            ]
+        },
+        "0x32B5107A2039df27FdE7d62773A2596aF92B7C2c": {
+            "index": 1,
+            "amountInWei": "107348975567454603565",
+            "amount": "107.348975567454603565 stkAAVE",
+            "proof": [
+                "0x4113565402b49b4268c809319be8f7494be2287e8362747fba7a5ec65832da6d"
+            ]
+        },
+        "0xc00d12FA6a53004fF978AdD5edAc49b9600Aca6f": {
+            "index": 2,
+            "amountInWei": "933314997065871",
+            "amount": "0.000933314997065871 stkAAVE",
+            "proof": [
+                "0x2f2dadb752a54c02080690a6c10e8952d871d3e85f10367aa1fa2d752bcf40a7",
+                "0xe3422ba5861af136f775c41327b67714fe53dc5a7947ec432a363787db829bde"
+            ]
+        }
+    }
+}

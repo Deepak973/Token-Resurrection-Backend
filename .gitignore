@@ -1,0 +1,23 @@
+
+.idea
+.vscode
+.env
+.DS_Store
+# Foundry
+out/
+cache/
+
+node_modules/
+
+etherscan/
+broadcast/
+js-scripts/maps/*Formatted.json
+
+.DS_Store
+
+#certora
+.certora*
+.certora*.json
+**.last_conf*
+certora-logs
+resource_errors.json

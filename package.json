@@ -1,0 +1,80 @@
+{
+  "name": "rescue-mission-phase-1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "scripts": {
+    "start": "nodemon",
+    "deploy:tenderly:test": "env-cmd ts-node js-scripts/deploy-scripts/testAllClaims.ts",
+    "deploy:tenderly": "env-cmd ts-node js-scripts/deploy-scripts/deploy.ts",
+    "generate:users-json": "ts-node js-scripts/users-resume.ts",
+    "generate-json": "env-cmd ts-node js-scripts/generate-address-value-maps.ts",
+    "generate-tree-with-map": "env-cmd ts-node js-scripts/generate-address-value-with-tree.ts",
+    "generate-json-formatted": "env-cmd ts-node js-scripts/format.ts",
+    "generate-tree": "ts-node js-scripts/generate-merkle-root.ts",
+    "aaveToken:current": "env-cmd cast etherscan-source -d etherscan 0xC13eac3B4F9EED480045113B7af00F7B5655Ece8",
+    "aaveToken:diff": "npm run aaveToken:current && sh generateDiffs.sh ./etherscan/AaveTokenV2/Contract.sol ./src/contracts/AaveTokenV2.sol AaveTokenV2",
+    "aaveStakeToken:current": "env-cmd cast etherscan-source -d etherscan 0xe42F02713aEC989132C1755117F768DBEa523d2f",
+    "aaveStakeToken:diff": "npm run aaveStakeToken:current && sh generateDiffs.sh ./etherscan/StakedTokenV2Rev3/Contract.sol ./src/contracts/StakedTokenV2Rev4.sol StakedTokenV2Rev4",
+    "lendToAaveMigrator:current": "env-cmd cast etherscan-source -d etherscan 0x86241b6c526998582556F7C0342D8863b604B17b",
+    "lendToAaveMigrator:diff": "npm run lendToAaveMigrator:current && sh generateDiffs.sh ./etherscan/LendToAaveMigrator/contracts/token/LendToAaveMigrator.sol ./src/contracts/LendToAaveMigrator.sol LendToAaveMigrator",
+    "deploy:test": "env-cmd npm run deployEcosystemReserve:test",
+    "deploy": "env-cmd npm run deploy:broadcast",
+    "deployVerify": "env-cmd npm run deploy:verify",
+    "verify": "env-cmd npm run verify:proposalLong",
+    "deployTest": "forge script scripts/Deploy.s.sol --fork-url $FORK_URL --private-key $PRIVATE_KEY --optimize --optimizer-runs 200 -vvvv",
+    "deploy:broadcast": "forge script scripts/Deploy.s.sol --private-key $PRIVATE_KEY --broadcast --fork-url $FORK_URL --verify --optimize --optimizer-runs 200 -vvvv",
+    "deploy:verify": "forge script scripts/Deploy.s.sol --private-key $PRIVATE_KEY --fork-url $FORK_URL --verify --optimize --optimizer-runs 200 -vvvv",
+    "test:contracts": "forge test --fork-url $FORK_URL -vvvv",
+    "verify:aaveToken": "forge verify-contract --compiler-version v0.7.5+commit.eb77ed08 0x66F5AF32cC4447d5cE422Be169B2fB8a892268c1 src/contracts/AaveTokenV2.sol:AaveTokenV2 --num-of-optimizations 200 --chain-id 5",
+    "verify:stkAave": "forge verify-contract --constructor-args $(cast abi-encode 'constructor(address,address,uint256,uint256,address,address,uint128,string,string,uint8)' 0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9 0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9 864000 172800 0x25F2226B597E8F9514B3F68F00f494cF4f286491 0xEE56e2B3D491590B5b31738cC34d5232F378a8D5 3155692600 'Staked Aave' 'stkAAVE' 18) --compiler-version v0.7.5+commit.eb77ed08 0xc2422E65af261DCcD993960dc097788E5edF53Df src/contracts/StakedTokenV2Rev4.sol:StakedTokenV2Rev4 --num-of-optimizations 200 --chain-id 5",
+    "verify:lendToAaveMigrator": "forge verify-contract --constructor-args $(cast abi-encode 'constructor(address,address,uint256)' 0x7Fc66500c84A76Ad7e9c93437bFc5Ac33E2DDaE9 0x80fB784B7eD66730e8b1DBd9820aFD29931aab03 100) --compiler-version v0.8.17+commit.8df45f5f 0xE35B90E1B1eF522dC40a5829c59e3d2d291a9360 src/contracts/LendToAaveMigrator.sol:LendToAaveMigrator --num-of-optimizations 200 --chain-id 5",
+    "verify:proposalShort": "forge verify-contract --constructor-args $(cast abi-encode 'constructor(address,address)' 0xC4D41369dA214f7d67B993a11B739631FC1C3C3E 0xE35B90E1B1eF522dC40a5829c59e3d2d291a9360) --compiler-version v0.8.17+commit.8df45f5f 0x834607F5d65451918a8fDD5D22d6eF97f84917ef src/contracts/ProposalPayloadShort.sol:ProposalPayloadShort --num-of-optimizations 200 --chain-id 5",
+    "verify:proposalLong": "forge verify-contract --constructor-args $(cast abi-encode 'constructor(address,address,address)' 0xC4D41369dA214f7d67B993a11B739631FC1C3C3E 0x66F5AF32cC4447d5cE422Be169B2fB8a892268c1 0xc2422E65af261DCcD993960dc097788E5edF53Df) --compiler-version v0.8.17+commit.8df45f5f 0x525EC320AbD05FF316683BA3e38023CEe72f9868 src/contracts/ProposalPayloadLong.sol:ProposalPayloadLong --num-of-optimizations 200 --chain-id 5",
+    "verify:merkleDistributor": "forge verify-contract --constructor-args $(cast abi-encode 'constructor()') --compiler-version v0.8.17+commit.8df45f5f 0xC4D41369dA214f7d67B993a11B739631FC1C3C3E src/contracts/AaveMerkleDistributor.sol:AaveMerkleDistributor --num-of-optimizations 200 --chain-id 5"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bgd-labs/rescue-mission-phase-1.git"
+  },
+  "keywords": [],
+  "author": "sendra",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bgd-labs/rescue-mission-phase-1/issues"
+  },
+  "homepage": "https://github.com/bgd-labs/rescue-mission-phase-1#readme",
+  "devDependencies": {
+    "@aave/contract-helpers": "^1.3.2",
+    "@aave/math-utils": "^1.3.2",
+    "@openzeppelin/contracts": "^4.6.0",
+    "@supercharge/promise-pool": "^2.1.0",
+    "@types/express": "^4.17.21",
+    "@types/node": "^17.0.34",
+    "bignumber.js": "^9.0.2",
+    "cheerio": "^1.0.0-rc.12",
+    "dotenv": "^16.0.3",
+    "env-cmd": "^10.1.0",
+    "ethereumjs-util": "^7.1.4",
+    "ethers": "^5.6.6",
+    "isomorphic-unfetch": "^3.1.0",
+    "nodemon": "^3.1.4",
+    "npm": "^8.10.0",
+    "prettier": "^2.6.2",
+    "prettier-plugin-solidity": "^1.0.0-beta.19",
+    "ts-node": "^10.7.0",
+    "tslib": "^2.4.0",
+    "typescript": "^4.6.4"
+  },
+  "dependencies": {
+    "@types/mongoose": "^5.11.97",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "mongoose": "^8.4.3"
+  }
+}

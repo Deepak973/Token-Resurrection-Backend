@@ -1,0 +1,20 @@
+{
+  "0x32B5107A2039df27FdE7d62773A2596aF92B7C2c": {
+    "amount": "107348975567454603565",
+    "txns": [
+      "0xef98e09bd038a5adeb5a08eba55d2ae275386f7bbd1ab01ba82e6a6806fad0b5"
+    ]
+  },
+  "0x2aa7D888CEC91D26e5A6D8DbE7DBE3E79DF5B347": {
+    "amount": "64000000000000000",
+    "txns": [
+      "0x909448092dc7499c1adf8c89d6a1bc906b714b043e963d15146b38b2c4c0598f"
+    ]
+  },
+  "0xc00d12FA6a53004fF978AdD5edAc49b9600Aca6f": {
+    "amount": "933314997065871",
+    "txns": [
+      "0x29239ec92173342bd127883779b9ba5288767785f6c8ee8b6d331c5d200bed7b"
+    ]
+  }
+}
