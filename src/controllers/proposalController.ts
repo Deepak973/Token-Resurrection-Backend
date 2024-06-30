@@ -5,25 +5,42 @@ const router = express.Router();
 
 // Add a new proposal
 router.post('/proposals', async (req, res) => {
-  const { tokenName, tokenAddress, contractAddress } = req.body;
+  const { merkelRoot, ResolverAddress, schemUid, selectedToken } = req.body;
+
+  console.log(req.body);
 
   try {
-    const existingProposal = await Proposal.findOne({ tokenAddress, contractAddress });
+    const existingProposal = await Proposal.findOne({
+      tokenAddress: selectedToken.tokenAddress,
+      contractAddress: selectedToken.contractAddress,
+    });
     if (existingProposal) {
       return res.status(400).json({ message: 'Proposal already exists' });
     }
 
-    const newProposal = new Proposal({ tokenName, tokenAddress, contractAddress });
+    const newProposal = new Proposal({
+      tokenName: selectedToken.tokenName,
+      tokenAddress: selectedToken.tokenAddress,
+      contractAddress: selectedToken.contractAddress,
+      merkelRoot: merkelRoot,
+      ResolverAddress: ResolverAddress,
+      schemUid: schemUid,
+    });
     await newProposal.save();
 
-    res.status(201).json({ message: 'Proposal created successfully', proposal: newProposal });
+    res.status(201).json({
+      message: 'Proposal created successfully',
+      proposal: newProposal,
+    });
   } catch (error) {
     console.error('Error creating proposal:', error);
-    res.status(500).json({ error: 'An error occurred while creating the proposal' });
+    res
+      .status(500)
+      .json({ error: 'An error occurred while creating the proposal' });
   }
 });
 
-// Approve a proposal 
+// Approve a proposal
 router.post('/proposals/:id/approve', async (req, res) => {
   const { id } = req.params;
   try {
@@ -32,14 +49,20 @@ router.post('/proposals/:id/approve', async (req, res) => {
       return res.status(404).json({ message: 'Proposal not found' });
     }
     if (proposal.status !== 'active') {
-      return res.status(400).json({ message: `Proposal is already ${proposal.status}` });
+      return res
+        .status(400)
+        .json({ message: `Proposal is already ${proposal.status}` });
     }
     proposal.status = 'approved';
     await proposal.save();
-    res.status(200).json({ message: 'Proposal approved successfully', proposal });
+    res
+      .status(200)
+      .json({ message: 'Proposal approved successfully', proposal });
   } catch (error) {
     console.error('Error approving proposal:', error);
-    res.status(500).json({ error: 'An error occurred while approving the proposal' });
+    res
+      .status(500)
+      .json({ error: 'An error occurred while approving the proposal' });
   }
 });
 
@@ -52,18 +75,23 @@ router.post('/proposals/:id/reject', async (req, res) => {
       return res.status(404).json({ message: 'Proposal not found' });
     }
     if (proposal.status !== 'active') {
-      return res.status(400).json({ message: `Proposal is already ${proposal.status}` });
+      return res
+        .status(400)
+        .json({ message: `Proposal is already ${proposal.status}` });
     }
 
     proposal.status = 'rejected';
     await proposal.save();
-    res.status(200).json({ message: 'Proposal rejected successfully', proposal });
+    res
+      .status(200)
+      .json({ message: 'Proposal rejected successfully', proposal });
   } catch (error) {
     console.error('Error rejecting proposal:', error);
-    res.status(500).json({ error: 'An error occurred while rejecting the proposal' });
+    res
+      .status(500)
+      .json({ error: 'An error occurred while rejecting the proposal' });
   }
 });
-
 
 // Get all proposals
 router.get('/proposals/all', async (req, res) => {
@@ -72,7 +100,9 @@ router.get('/proposals/all', async (req, res) => {
     res.status(200).json(proposals);
   } catch (error) {
     console.error('Error fetching all proposals:', error);
-    res.status(500).json({ error: 'An error occurred while fetching all proposals' });
+    res
+      .status(500)
+      .json({ error: 'An error occurred while fetching all proposals' });
   }
 });
 
@@ -84,7 +114,9 @@ router.get('/proposals', async (req, res) => {
     res.status(200).json(proposal);
   } catch (error) {
     console.error('Error fetching proposal:', error);
-    res.status(500).json({ error: 'An error occurred while fetching the proposal' });
+    res
+      .status(500)
+      .json({ error: 'An error occurred while fetching the proposal' });
   }
 });
 
@@ -96,7 +128,9 @@ router.get('/proposals/token/:tokenAddress', async (req, res) => {
     res.status(200).json(proposals);
   } catch (error) {
     console.error('Error fetching proposals:', error);
-    res.status(500).json({ error: 'An error occurred while fetching the proposals' });
+    res
+      .status(500)
+      .json({ error: 'An error occurred while fetching the proposals' });
   }
 });
 
@@ -106,14 +140,17 @@ router.get('/proposals/status/:status', async (req, res) => {
   try {
     const proposals = await Proposal.find({ status });
     if (proposals.length === 0) {
-      return res.status(404).json({ message: `No proposals found with status: ${status}` });
+      return res
+        .status(404)
+        .json({ message: `No proposals found with status: ${status}` });
     }
     res.status(200).json(proposals);
   } catch (error) {
     console.error('Error fetching proposals by status:', error);
-    res.status(500).json({ error: 'An error occurred while fetching the proposals by status' });
+    res.status(500).json({
+      error: 'An error occurred while fetching the proposals by status',
+    });
   }
 });
-
 
 export default router;
