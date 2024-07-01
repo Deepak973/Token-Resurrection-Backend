@@ -6,14 +6,20 @@ import proposalController from './controllers/proposalController';
 import userController from './controllers/userController';
 import transactionController from './controllers/transactionController';
 import connectDB from './config/database';
-const cors = require("cors");
+const cors = require('cors');
 
 dotenv.config();
 
 const app = express();
-app.use(cors());
-const port = process.env.PORT || 3000;
 
+const corsOptions = {
+  origin: 'https://token-resurrection.vercel.app',
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
+
+app.use(cors(corsOptions));
+const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
 

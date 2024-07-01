@@ -21,3 +21,4 @@ js-scripts/maps/*Formatted.json
 **.last_conf*
 certora-logs
 resource_errors.json
+.vercel
