@@ -25,6 +25,9 @@ app.use('/api', merkleTreeController);
 app.use('/api', proposalController);
 app.use('/api', transactionController);
 app.use('/api', userController);
+app.get('/', async (req, res) => {
+  res.json({ message: 'it is working' });
+});
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
