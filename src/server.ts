@@ -12,14 +12,19 @@ dotenv.config();
 
 const app = express();
 
-app.use(
-  cors({
-    origin: '*',
-    methods: ['GET', 'POST'],
-    allowedHeaders: ['Content-Type'],
-    optionsSuccessStatus: 204,
-  }),
-);
+const corsOptions = {
+  origin: '*', // Allow all origins
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
+};
+
+app.use(cors(corsOptions));
+
+// Add a pre-flight route for OPTIONS requests
+app.options('*', cors(corsOptions));
 
 const port = process.env.PORT || 3000;
 

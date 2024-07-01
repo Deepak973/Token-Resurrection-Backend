@@ -46,7 +46,7 @@ router.post('/proposals/:id/approve', async (req, res) => {
   try {
     const proposal = await Proposal.findById(id);
     if (!proposal) {
-      return res.status(404).json({ message: 'Proposal not found' });
+      return res.status(200).json({ message: 'Proposal not found' });
     }
     if (proposal.status !== 'active') {
       return res

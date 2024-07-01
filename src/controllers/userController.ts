@@ -7,18 +7,18 @@ const router = express.Router();
 router.get('/user', async (req, res) => {
   const { address } = req.query;
   if (!address) {
-    return res.status(400).json({ error: 'Address parameter is required' });
+    return res.status(200).json({ error: 'Address parameter is required' });
   }
 
   try {
     const user = await User.findOne({ address }).lean();
     if (!user) {
       return res
-        .status(404)
+        .status(200)
         .json({ error: 'No Attestation or Claims found for the address' });
     }
 
-    res.status(200).json(user);
+    res.status(201).json(user);
   } catch (error) {
     console.error('Error fetching user data:', error);
     res
