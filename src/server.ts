@@ -13,7 +13,7 @@ dotenv.config();
 const app = express();
 
 const corsOptions = {
-  origin: 'https://token-resurrection.vercel.app',
+  origin: 'https://token-resurrection.vercel.app/*',
   methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
   allowedHeaders: ['Content-Type', 'Authorization'],
 };
