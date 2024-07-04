@@ -144,15 +144,15 @@ router.get('/user-transactions', async (req: Request, res: Response) => {
 
   try {
     if (!user) {
-      return res.status(200).json({ error: 'User address is required' });
+      return res.status(201).json({ error: 'User address is required' });
     }
 
     const transactions = await Transaction.find({ from: user });
 
     if (transactions.length === 0) {
       return res
-        .status(200)
-        .json({ message: 'No transactions found for the given user address' });
+        .status(201)
+        .json({ message: 'No Attestation or Claims Available at the moment' });
     }
 
     const aggregatedTransactions = transactions.reduce((acc, transaction) => {
