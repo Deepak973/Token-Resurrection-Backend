@@ -1,11 +1,12 @@
-import express from 'express';
 import Proposal from '../models/Proposal';
+import express, { Request, Response } from 'express';
 
 const router = express.Router();
 
 // Add a new proposal
 router.post('/proposals', async (req, res) => {
-  const { merkelRoot, ResolverAddress, schemUid, selectedToken } = req.body;
+  const { merkelRoot, ResolverAddress, schemUid, selectedToken, addresses } =
+    req.body;
 
   console.log(req.body);
 
@@ -25,6 +26,7 @@ router.post('/proposals', async (req, res) => {
       merkelRoot: merkelRoot,
       ResolverAddress: ResolverAddress,
       schemUid: schemUid,
+      addresses: addresses,
     });
     await newProposal.save();
 
@@ -40,6 +42,27 @@ router.post('/proposals', async (req, res) => {
   }
 });
 
+router.get('/checkproposals', async (req, res) => {
+  const { tokenAddress, contractAddress } = req.query;
+
+  console.log(req.query);
+
+  try {
+    const existingProposal = await Proposal.findOne({
+      tokenAddress,
+      contractAddress,
+    });
+    if (existingProposal) {
+      return res.status(201).json({ message: 'Proposal already exists' });
+    }
+    return res.status(200).json({ message: 'Proposal can be added' });
+  } catch (error) {
+    console.error('Error checking proposal:', error);
+    res
+      .status(500)
+      .json({ error: 'An error occurred while checking the proposal' });
+  }
+});
 // Approve a proposal
 router.post('/proposals/:id/approve', async (req, res) => {
   const { id } = req.params;

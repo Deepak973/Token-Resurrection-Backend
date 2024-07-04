@@ -9,7 +9,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "start": "node dist/server.js",
+    "start": "nodemon",
     "deploy:tenderly:test": "env-cmd ts-node js-scripts/deploy-scripts/testAllClaims.ts",
     "deploy:tenderly": "env-cmd ts-node js-scripts/deploy-scripts/deploy.ts",
     "generate:users-json": "ts-node js-scripts/users-resume.ts",

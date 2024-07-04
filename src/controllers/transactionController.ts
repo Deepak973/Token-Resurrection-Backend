@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express';
 import Transaction from '../models/Transaction';
+import Proposal from '../models/Proposal';
 import { BigNumber } from 'ethers';
 import { generateTransactions } from '../services/merkleTreeService';
 const router = express.Router();
@@ -39,11 +40,9 @@ router.get('/transactions', async (req: Request, res: Response) => {
     );
 
     if (result.transactions.length === 0) {
-      return res
-        .status(200)
-        .json({
-          message: 'No transactions found for the given token and to address',
-        });
+      return res.status(200).json({
+        message: 'No transactions found for the given token and to address',
+      });
     }
 
     res.status(200).json(result);
@@ -95,6 +94,51 @@ router.post('/transactions', async (req: Request, res: Response) => {
 });
 
 // Get transactions by user address
+// router.get('/user-transactions', async (req: Request, res: Response) => {
+//   const { user } = req.query;
+
+//   try {
+//     if (!user) {
+//       return res.status(200).json({ error: 'User address is required' });
+//     }
+
+//     const transactions = await Transaction.find({ from: user });
+
+//     if (transactions.length === 0) {
+//       return res
+//         .status(200)
+//         .json({ message: 'No transactions found for the given user address' });
+//     }
+
+//     const aggregatedTransactions = transactions.reduce((acc, transaction) => {
+//       const key = `${transaction.token}-${transaction.to}`;
+//       if (!acc[key]) {
+//         acc[key] = BigNumber.from(0);
+//       }
+//       acc[key] = acc[key].add(BigNumber.from(transaction.amount));
+//       return acc;
+//     }, {} as Record<string, BigNumber>);
+
+//     const results = Object.keys(aggregatedTransactions).map((key) => {
+//       const [token, to] = key.split('-');
+//       return {
+//         token,
+//         to,
+//         totalAmount: aggregatedTransactions[key].toString(),
+//       };
+//     });
+
+//     res.status(200).json(results);
+//   } catch (error) {
+//     console.error('Error fetching user transactions:', error);
+//     res
+//       .status(500)
+//       .json({
+//         error: 'An error occurred while fetching the user transactions',
+//       });
+//   }
+// });
+
 router.get('/user-transactions', async (req: Request, res: Response) => {
   const { user } = req.query;
 
@@ -120,23 +164,41 @@ router.get('/user-transactions', async (req: Request, res: Response) => {
       return acc;
     }, {} as Record<string, BigNumber>);
 
-    const results = Object.keys(aggregatedTransactions).map((key) => {
-      const [token, to] = key.split('-');
-      return {
-        token,
-        to,
-        totalAmount: aggregatedTransactions[key].toString(),
-      };
-    });
+    const results = await Promise.all(
+      Object.keys(aggregatedTransactions).map(async (key) => {
+        const [token, to] = key.split('-');
+        const totalAmount = aggregatedTransactions[key].toString();
+
+        // Find the matching proposal
+        const proposal = await Proposal.findOne({
+          tokenName: token,
+          contractAddress: to,
+        });
+
+        if (proposal) {
+          return {
+            token,
+            to,
+            totalAmount,
+            schemUid: proposal.schemUid,
+            addresses: proposal.addresses,
+          };
+        } else {
+          return {
+            token,
+            to,
+            totalAmount,
+          };
+        }
+      }),
+    );
 
     res.status(200).json(results);
   } catch (error) {
     console.error('Error fetching user transactions:', error);
-    res
-      .status(500)
-      .json({
-        error: 'An error occurred while fetching the user transactions',
-      });
+    res.status(500).json({
+      error: 'An error occurred while fetching the user transactions',
+    });
   }
 });
 

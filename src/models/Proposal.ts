@@ -8,6 +8,7 @@ interface IProposal extends Document {
   ResolverAddress: string;
   schemUid: string;
   status: 'active' | 'approved' | 'rejected';
+  addresses: string[];
 }
 
 const proposalSchema: Schema<IProposal> = new Schema({
@@ -22,6 +23,7 @@ const proposalSchema: Schema<IProposal> = new Schema({
     enum: ['active', 'approved', 'rejected'],
     default: 'active',
   },
+  addresses: { type: [String], required: true },
 });
 
 // Create a Model
