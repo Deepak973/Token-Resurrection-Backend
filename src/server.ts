@@ -48,6 +48,11 @@ app.use((req, res, next) => {
 
   next();
 });
+
+app.use((req, res, next) => {
+  res.setTimeout(120000); // 2 minutes
+  next();
+});
 const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
