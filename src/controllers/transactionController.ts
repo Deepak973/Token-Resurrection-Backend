@@ -81,7 +81,7 @@ router.post('/transactions', async (req: Request, res: Response) => {
 
     // Retrieve and return the saved transactions
     const result = await getTransactionsByTokenAndTo(token, to);
-    res.status(201).json({
+    res.status(200).json({
       message: 'Transactions created successfully',
       ...result,
     });
