@@ -173,7 +173,7 @@ router.get('/proposals/status/:status', async (req, res) => {
     const proposals = await Proposal.find({ status });
     if (proposals.length === 0) {
       return res
-        .status(404)
+        .status(200)
         .json({ message: `No proposals found with status: ${status}` });
     }
     res.status(200).json(proposals);
