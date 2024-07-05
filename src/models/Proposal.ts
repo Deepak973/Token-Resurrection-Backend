@@ -9,6 +9,8 @@ interface IProposal extends Document {
   schemUid: string;
   status: 'active' | 'approved' | 'rejected';
   addresses: string[];
+  totalAmount: string;
+  totalAccount: string;
 }
 
 const proposalSchema: Schema<IProposal> = new Schema({
@@ -24,6 +26,8 @@ const proposalSchema: Schema<IProposal> = new Schema({
     default: 'active',
   },
   addresses: { type: [String], required: true },
+  totalAmount: { type: String, required: true },
+  totalAccount: { type: String, required: true },
 });
 
 // Create a Model

@@ -5,8 +5,15 @@ const router = express.Router();
 
 // Add a new proposal
 router.post('/proposals', async (req, res) => {
-  const { merkelRoot, ResolverAddress, schemUid, selectedToken, addresses } =
-    req.body;
+  const {
+    merkelRoot,
+    ResolverAddress,
+    schemUid,
+    selectedToken,
+    addresses,
+    totalAmount,
+    totalAccount,
+  } = req.body;
 
   console.log(req.body);
 
@@ -27,6 +34,8 @@ router.post('/proposals', async (req, res) => {
       ResolverAddress: ResolverAddress,
       schemUid: schemUid,
       addresses: addresses,
+      totalAmount: totalAmount,
+      totalAccount: totalAccount,
     });
     await newProposal.save();
 
