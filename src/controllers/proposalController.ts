@@ -13,6 +13,7 @@ router.post('/proposals', async (req, res) => {
     addresses,
     totalAmount,
     totalAccount,
+    chainId,
   } = req.body;
 
   console.log(req.body);
@@ -36,6 +37,7 @@ router.post('/proposals', async (req, res) => {
       addresses: addresses,
       totalAmount: totalAmount,
       totalAccount: totalAccount,
+      chainId: chainId,
     });
     await newProposal.save();
 

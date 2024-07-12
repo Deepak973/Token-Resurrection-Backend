@@ -11,6 +11,7 @@ interface IProposal extends Document {
   addresses: string[];
   totalAmount: string;
   totalAccount: string;
+  chainId: string;
 }
 
 const proposalSchema: Schema<IProposal> = new Schema({
@@ -28,6 +29,7 @@ const proposalSchema: Schema<IProposal> = new Schema({
   addresses: { type: [String], required: true },
   totalAmount: { type: String, required: true },
   totalAccount: { type: String, required: true },
+  chainId: { type: String, required: true },
 });
 
 // Create a Model

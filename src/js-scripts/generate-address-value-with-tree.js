@@ -16,21 +16,23 @@ const User_1 = __importDefault(require("../models/User"));
 dotenv_1.default.config();
 const JSON_RPC_PROVIDER = {
     [contract_helpers_1.ChainId.mainnet]: `https://eth-mainnet.alchemyapi.io/v2/${process.env.ALCHEMY_KEY}`,
+    [contract_helpers_1.ChainId.optimism]: `https://opt-mainnet.g.alchemy.com/v2/9WBG_MVRsmOhaR5bEVKYclPwb_q9tIiw`,
 };
 //usdc,dai,weth,uni
 exports.TOKENS = {
-    // LEND: '0x80fB784B7eD66730e8b1DBd9820aFD29931aab03', 
+    // LEND: '0x80fB784B7eD66730e8b1DBd9820aFD29931aab03',
     UNI: '0x1f9840a85d5aF5bf1D1762F925BDADdC4201F984',
     WETH: '0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2',
     USDC: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
-    DAI: '0x6B175474E89094C44Da98b954EedeAC495271d0F'
+    DAI: '0x6B175474E89094C44Da98b954EedeAC495271d0F',
+    OP: '0x4200000000000000000000000000000000000042',
 };
 //usdc,dai,weth,uni
-async function fetchTxns(symbol, to, network, name, validateEvent) {
+async function fetchTxns(symbol, to, chainId, network, name, validateEvent) {
     const token = exports.TOKENS[symbol];
-    console.log('1');
-    const provider = new ethers_1.providers.StaticJsonRpcProvider(JSON_RPC_PROVIDER[contract_helpers_1.ChainId.mainnet]);
-    console.log('provider', provider);
+    console.log('chainId', chainId);
+    const provider = new ethers_1.providers.StaticJsonRpcProvider(JSON_RPC_PROVIDER[chainId]);
+    console.log('this is the provider', provider);
     const contract = IERC20__factory_1.IERC20__factory.connect(token, provider);
     const event = contract.filters.Transfer(null, to);
     console.log('2');
@@ -154,15 +156,15 @@ async function generateAndSaveMap(mappedContract, symbol, decimals, to) {
                     symbol,
                     contractAddress: to,
                     amount: claim.amount,
-                    amountInWei: claim.amountInWei
-                }
-            }
+                    amountInWei: claim.amountInWei,
+                },
+            },
         }, { upsert: true, new: true });
         await user.save();
     }
 }
 exports.generateAndSaveMap = generateAndSaveMap;
-async function saveTransactionData(mappedContract, symbol, to) {
+async function saveTransactionData(mappedContract, symbol, to, chainId) {
     for (const [address, data] of Object.entries(mappedContract)) {
         const transaction = new Transaction_1.default({
             from: address,
@@ -170,6 +172,7 @@ async function saveTransactionData(mappedContract, symbol, to) {
             txHash: data.txHash,
             token: symbol,
             to: to,
+            chainId: chainId,
         });
         await transaction.save();
     }

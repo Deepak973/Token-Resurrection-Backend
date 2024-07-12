@@ -56,7 +56,7 @@ router.get('/transactions', async (req: Request, res: Response) => {
 
 // Create transactions by token and to address
 router.post('/transactions', async (req: Request, res: Response) => {
-  const { token, to } = req.body;
+  const { token, to, chainId } = req.body;
 
   try {
     if (!token || !to) {
@@ -66,7 +66,7 @@ router.post('/transactions', async (req: Request, res: Response) => {
     }
 
     // Check if transactions already exist for the given token and to address
-    const existingTransactions = await Transaction.find({ token, to });
+    const existingTransactions = await Transaction.find({ token, to, chainId });
 
     if (existingTransactions.length > 0) {
       const result = await getTransactionsByTokenAndTo(token, to);
@@ -76,8 +76,9 @@ router.post('/transactions', async (req: Request, res: Response) => {
       });
     }
 
+    console.log('chain ID', chainId);
     // Fetch and save transactions
-    await generateTransactions(token, to);
+    await generateTransactions(token, to, chainId);
 
     // Retrieve and return the saved transactions
     const result = await getTransactionsByTokenAndTo(token, to);
