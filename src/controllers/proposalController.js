@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const Proposal_1 = __importDefault(require("../models/Proposal"));
 const express_1 = __importDefault(require("express"));
+const Transaction_1 = __importDefault(require("../models/Transaction"));
 const router = express_1.default.Router();
 // Add a new proposal
 router.post('/proposals', async (req, res) => {
@@ -167,6 +168,29 @@ router.get('/proposals/status/:status', async (req, res) => {
                 .json({ message: `No proposals found with status: ${status}` });
         }
         res.status(200).json(proposals);
+    }
+    catch (error) {
+        console.error('Error fetching proposals by status:', error);
+        res.status(500).json({
+            error: 'An error occurred while fetching the proposals by status',
+        });
+    }
+});
+router.get('/proposals/transactionhash', async (req, res) => {
+    const { from, to, token, chainId } = req.query;
+    try {
+        const transactionHash = await Transaction_1.default.find({
+            from: from,
+            to: to,
+            token: token,
+            chainId: chainId,
+        });
+        if (transactionHash.length === 0) {
+            return res
+                .status(200)
+                .json({ message: `No Transaction found for the address: ${from}` });
+        }
+        res.status(200).json(transactionHash);
     }
     catch (error) {
         console.error('Error fetching proposals by status:', error);

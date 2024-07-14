@@ -1,5 +1,6 @@
 import Proposal from '../models/Proposal';
 import express, { Request, Response } from 'express';
+import Transaction from '../models/Transaction';
 
 const router = express.Router();
 
@@ -179,6 +180,29 @@ router.get('/proposals/status/:status', async (req, res) => {
         .json({ message: `No proposals found with status: ${status}` });
     }
     res.status(200).json(proposals);
+  } catch (error) {
+    console.error('Error fetching proposals by status:', error);
+    res.status(500).json({
+      error: 'An error occurred while fetching the proposals by status',
+    });
+  }
+});
+
+router.get('/proposals/transactionhash', async (req, res) => {
+  const { from, to, token, chainId } = req.query;
+  try {
+    const transactionHash = await Transaction.find({
+      from: from,
+      to: to,
+      token: token,
+      chainId: chainId,
+    });
+    if (transactionHash.length === 0) {
+      return res
+        .status(200)
+        .json({ message: `No Transaction found for the address: ${from}` });
+    }
+    res.status(200).json(transactionHash);
   } catch (error) {
     console.error('Error fetching proposals by status:', error);
     res.status(500).json({
