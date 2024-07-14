@@ -38,6 +38,9 @@ const generateTransactions = async (symbol, to, chainId) => {
         case contract_helpers_1.ChainId.mainnet:
             chain = contract_helpers_1.ChainId.mainnet;
             break;
+        case contract_helpers_1.ChainId.arbitrum_one:
+            chain = contract_helpers_1.ChainId.arbitrum_one;
+            break;
         default:
             throw new Error(`Unsupported chainId: ${chainId}`);
     }

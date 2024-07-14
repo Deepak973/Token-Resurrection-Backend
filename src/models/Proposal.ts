@@ -1,5 +1,9 @@
 import mongoose, { Document, Schema, Model } from 'mongoose';
 
+type AddressData = {
+  from: string;
+  amount: string;
+};
 interface IProposal extends Document {
   tokenName: string;
   tokenAddress: string;
@@ -8,12 +12,16 @@ interface IProposal extends Document {
   ResolverAddress: string;
   schemUid: string;
   status: 'active' | 'approved' | 'rejected';
-  addresses: string[];
+  addresses: AddressData[];
   totalAmount: string;
   totalAccount: string;
   chainId: string;
 }
 
+const addressSchema: Schema<AddressData> = new Schema({
+  from: { type: String, required: true },
+  amount: { type: String, required: true },
+});
 const proposalSchema: Schema<IProposal> = new Schema({
   tokenName: { type: String, required: true },
   tokenAddress: { type: String, required: true },
@@ -26,7 +34,7 @@ const proposalSchema: Schema<IProposal> = new Schema({
     enum: ['active', 'approved', 'rejected'],
     default: 'active',
   },
-  addresses: { type: [String], required: true },
+  addresses: { type: [addressSchema], required: true },
   totalAmount: { type: String, required: true },
   totalAccount: { type: String, required: true },
   chainId: { type: String, required: true },

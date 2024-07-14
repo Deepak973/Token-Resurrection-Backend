@@ -12,6 +12,7 @@ dotenv.config();
 const JSON_RPC_PROVIDER = {
   [ChainId.mainnet]: `https://eth-mainnet.alchemyapi.io/v2/${process.env.ALCHEMY_KEY}`,
   [ChainId.optimism]: `https://opt-mainnet.g.alchemy.com/v2/9WBG_MVRsmOhaR5bEVKYclPwb_q9tIiw`,
+  [ChainId.arbitrum_one]: `https://arb-mainnet.g.alchemy.com/v2/9WBG_MVRsmOhaR5bEVKYclPwb_q9tIiw`,
 };
 //usdc,dai,weth,uni
 export const TOKENS = {
@@ -21,6 +22,7 @@ export const TOKENS = {
   USDC: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',
   DAI: '0x6B175474E89094C44Da98b954EedeAC495271d0F',
   OP: '0x4200000000000000000000000000000000000042',
+  ARB: '0x912CE59144191C1204E64559FE8253a0e49E6548',
 };
 //usdc,dai,weth,uni
 

@@ -42,7 +42,7 @@ const generateTransactions = async (
   to: string,
   chainId: number,
 ) => {
-  let chain: ChainId.mainnet | ChainId.optimism;
+  let chain: ChainId.mainnet | ChainId.optimism | ChainId.arbitrum_one;
 
   switch (chainId) {
     case ChainId.optimism:
@@ -50,6 +50,9 @@ const generateTransactions = async (
       break;
     case ChainId.mainnet:
       chain = ChainId.mainnet;
+      break;
+    case ChainId.arbitrum_one:
+      chain = ChainId.arbitrum_one;
       break;
     default:
       throw new Error(`Unsupported chainId: ${chainId}`);
