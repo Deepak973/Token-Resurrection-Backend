@@ -76,9 +76,9 @@ router.post('/transactions', async (req: Request, res: Response) => {
       });
     }
 
-    console.log('chain ID', chainId);
+    console.log('chain ID is ', chainId);
     // Fetch and save transactions
-    await generateTransactions(token, to, chainId);
+    await generateTransactions(token, to, 10);
 
     // Retrieve and return the saved transactions
     const result = await getTransactionsByTokenAndTo(token, to);

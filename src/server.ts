@@ -26,6 +26,7 @@ app.use((req, res, next) => {
   const allowedOrigins = [
     'https://token-resurrection.vercel.app',
     'http://localhost:3000',
+    '*',
   ]; // Add your frontend URLs
   const origin = req.headers.origin;
 
