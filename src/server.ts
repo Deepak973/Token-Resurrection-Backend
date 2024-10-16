@@ -12,36 +12,19 @@ dotenv.config();
 
 const app = express();
 
-// const corsOptions = {
-//   origin: '*',
-//   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-//   allowedHeaders: ['Content-Type', 'Authorization'],
-//   credentials: true,
-// };
-
-// app.options('*', cors(corsOptions));
-// app.use(cors(corsOptions));
-
+// Allow all origins and set necessary headers
 app.use((req, res, next) => {
-  const allowedOrigins = [
-    'https://token-resurrection.vercel.app',
-    'http://localhost:3000',
-    '*',
-  ]; // Add your frontend URLs
-  const origin = req.headers.origin;
-
-  if (origin && allowedOrigins.includes(origin)) {
-    res.setHeader('Access-Control-Allow-Origin', origin);
-  }
-
+  res.setHeader('Access-Control-Allow-Origin', '*'); // Allow all origins
   res.removeHeader('x-powered-by');
   res.setHeader(
     'Access-Control-Allow-Methods',
     'GET, POST, PUT, DELETE, OPTIONS',
   );
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
-  res.setHeader('Access-Control-Allow-Credentials', 'true');
-
+  
+  // No need for Access-Control-Allow-Credentials if you are allowing all origins
+  // res.setHeader('Access-Control-Allow-Credentials', 'true'); 
+  
   // Handle preflight requests
   if (req.method === 'OPTIONS') {
     return res.sendStatus(204);
@@ -54,6 +37,7 @@ app.use((req, res, next) => {
   res.setTimeout(120000); // 2 minutes
   next();
 });
+
 const port = process.env.PORT || 3000;
 
 app.use(bodyParser.json());
